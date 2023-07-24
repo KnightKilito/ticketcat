@@ -4,9 +4,9 @@
 项目地址：
 |项目名|项目内容|项目地址|开发人员|
 |--|--|--|--|
-|ticketcat|SpringBoot后台服务|[戳我](https://github.com/KnightKilito/ticketcat)|[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://gitee.com/yang-feng-hank)|
-|ticketcat-web-user|Web前端服务-用户端|[戳我](https://github.com/KnightKilito/ticketcat-web-user)|[@东东](https://github.com/zxd16)<br/>[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://gitee.com/yang-feng-hank)|
-|ticketcat-web-manager|Web前端服务-管理员端|[戳我](https://github.com/KnightKilito/ticketcat-web-manager)|[@东东](https://github.com/zxd16)<br/>[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://gitee.com/yang-feng-hank)|
+|ticketcat|SpringBoot后台服务|[戳我](https://github.com/KnightKilito/ticketcat)|[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://github.com/hankhorse/hankhorse)|
+|ticketcat-web-user|Web前端服务-用户端|[戳我](https://github.com/KnightKilito/ticketcat-web-user)|[@东东](https://github.com/zxd16)<br/>[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://github.com/hankhorse/hankhorse)|
+|ticketcat-web-manager|Web前端服务-管理员端|[戳我](https://github.com/KnightKilito/ticketcat-web-manager)|[@东东](https://github.com/zxd16)<br/>[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://github.com/hankhorse/hankhorse)|
 |ticketcat-wechat-miniprogram|微信小程序前端服务（记得安装vant for wx）|[戳我](https://github.com/KnightKilito/ticketcat-wechat-miniprogram)|[@东东](https://github.com/zxd16)|
 
 **前端的项目请求地址记得改哦**，**前端的项目请求地址记得改哦**，**前端的项目请求地址记得改哦**，当初做项目的时候负责web端的同学偷懒没搞页面路由，而且用的还是传统三剑客，辛苦各位逐一修改了
