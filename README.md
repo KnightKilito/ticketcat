@@ -5,7 +5,7 @@
 |项目名|项目内容|项目地址|开发人员|
 |--|--|--|--|
 |ticketcat|SpringBoot后台服务|[戳我](https://github.com/KnightKilito/ticketcat)|[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://gitee.com/yang-feng-hank)|
-|ticketcat-web-user|Web前端服务-用户端|[戳我](https://github.com/KnightKilito/ticketcat-web-user)|[@东东](https://github.com/zxd16)|
+|ticketcat-web-user|Web前端服务-用户端|[戳我](https://github.com/KnightKilito/ticketcat-web-user)|[@东东](https://github.com/zxd16)<br/>[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://gitee.com/yang-feng-hank)|
 |ticketcat-web-manager|Web前端服务-管理员端|[戳我](https://github.com/KnightKilito/ticketcat-web-manager)|[@东东](https://github.com/zxd16)<br/>[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://gitee.com/yang-feng-hank)|
 |ticketcat-wechat-miniprogram|微信小程序前端服务（记得安装vant for wx）|[戳我](https://github.com/KnightKilito/ticketcat-wechat-miniprogram)|[@东东](https://github.com/zxd16)|
 
