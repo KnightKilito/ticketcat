@@ -1,0 +1,77 @@
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://eureka-1:8761/eureka/
+server:
+  port: 8081
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+  servlet:
+    context-path: /tpm
+
+spring:
+  datasource:
+    # server url
+    url: jdbc:mysql://127.0.0.1:3306/tpm?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+    # local url
+#    url: jdbc:mysql://localhost:3306/tpm?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+
+    username: root
+    password: '123456'
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+#    port: 6739 #server port
+    port: 6379 #local port
+    database: 1
+    # server password
+    password: '123456'
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+
+logging:
+  charset:
+    console: utf-8
+    file: UTF-8
+  file:
+    path: log/
+
+mybatis-plus:
+  mapper-locations: classpath*:com/tpm/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.tpm.entity.*
+
+user:
+  # 默认头像地址，可以自己改，我这个地址的ssl证书已经失效不再配置，但是http还是可以访问的（应该
+  defAvatar: https://tpm-avatar.moechun.fun/default/%E7%8C%AB%E5%92%AA.png
+
+
+wx:
+  # 自行配置，微信的应用编码，用于微信扫码登录
+  appid: xxx
+  secret: xxx
+
+qiniu:
+  # 自行配置，七牛云的权限码
+  accessKey: xxx
+  accessSecretKey: xxx
+
+alipay:
+  # 自行配置，支付宝沙盒支付的应用编码，网上很多教程
+  APP_ID: xxx
+  APP_PRIVATE_KEY: xxx
+  ALIPAY_PUBLIC_KEY: xxx
+  #  LOG_PATH: D:\Program\IdeaProjects\TicketCat\log
+  LOG_PATH: /usr/local/java/tpm/log
+  notify_url: http://localhost:8081/tpm/alipay/notify
+  return_url: http://localhost:8081/tpm/wxUser/success
+

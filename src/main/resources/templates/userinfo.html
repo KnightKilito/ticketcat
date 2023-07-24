@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>个人信息修改</title>
+<link rel="preconnect" href="https://fonts.gstatic.com"/>
+<link href="static/css/fc1ab68d70ad48e88943ce422f4566dc.css" rel="stylesheet"/>
+<link rel="stylesheet" href="static/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="static/css/bootstrap-select.min.css"/>
+<link rel="stylesheet" href="static/css/animate.min.css"/>
+<link rel="stylesheet" href="static/css/all.min.css"/>
+<link rel="stylesheet" href="static/css/jarallax.css"/>
+<link rel="stylesheet" href="static/css/organik-icons.css"/>
+<link rel="stylesheet" href="static/css/jquery.magnific-popup.css"/>
+<link rel="stylesheet" href="static/css/nouislider.min.css"/>
+<link rel="stylesheet" href="static/css/nouislider.pips.css"/>
+<link rel="stylesheet" href="static/css/odometer.min.css"/>
+<link rel="stylesheet" href="static/css/swiper.min.css"/>
+<link rel="stylesheet" href="static/css/tiny-slider.min.css"/>
+<link href="css/common.css" rel="stylesheet" type="text/css"/>
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+<script src="static/jquery-1.8.3.min.js" type="text/javascript"></script>
+<script src="static/jquery.SuperSlide.2.1.1.js" type="text/javascript"></script>
+<script src="static/common_js.js" type="text/javascript"></script>
+<script src="static/footer.js" type="text/javascript"></script>
+<link rel="stylesheet" href="static/css/organik.css"/>
+<!--模态框-->
+<script src="static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="css/imgupload.css">
+<script src="static/js/hit.js" type="text/javascript"></script>
+<script>
+    //当文档加载完成后再执行
+    $(document).ready(function () {
+        $.ajax({
+            url: "http://localhost:8088/UniverseFarmBack/isLogin.do",
+            dataType: "json",
+            type: "get",
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (result) {
+                if (result.flag == 1) {
+                    //说明已经登录
+                    $("#logininfo").html("欢迎你，" + result.data.userName + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='loginout()'  >注销</a>");
+                    $("#userinfo").html("<ul class=\"main-menu__list\"><li class=\"dropdown\"><a href='index.html'><i className='organik-icon-user'></i>个人中心</a> " +
+                        "<ul>\n" +
+                        "<li>\n" +
+                        "<a href=\"userinfo.html\#change\">个人信息修改</a></li>\n" +
+                        "<li><a href=\"userinfo.html\#have\">我的元产品</a></li>\n" +
+                        " <li><a href=\"userinfo.html\#money\">充值</a></li>\n" +
+                        "</li>\n" +
+                        "</ul>" +
+                        "</li>"
+                    );
+                } else {
+                    //说明未登录
+                    $("#logininfo").html("<a href='login.html' class='green'>登录</a> /<a href='register.html' class='green'>免费注册</a>");
+                }
+            }
+        });
+
+    });
+
+
+</script>
+<script>
+    function loginout() {
+        $.ajax({
+            url: "http://localhost:8088/UniverseFarmBack/loginOut.do",
+            dataType: "json",
+            type: "get",
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (result) {
+                alert(result.msg);
+                //跳转到登录页面？刷新页面
+                location.reload();
+            }
+        });
+
+
+    }
+
+
+</script>
+<script>
+    //当文档加载完毕时触发
+    $(document).ready(function () {
+        //加载当前的登录用户
+        $.ajax({
+            url: "http://localhost:8088/UniverseFarmBack/getSoilGoodsByUserId.do",
+            dataType: "json",
+            type: "get",
+            xhrFields: {                               //保存session在跨域访问中不会丢失！！！
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (result) {
+                if (result.flag == 0) {
+                    //没有数据
+                    $("#soillist").html("暂无数据");
+                } else {
+                    //取出数据
+                    var mydata = result.data;
+
+                    var i;
+                    for (i = 0; i < mydata.length; i++) {
+                        var str = "";
+                        str = str + '<div class="col-lg-4 col-md-6 filter-item fruits">' +
+                            '<div class="product-card__two">' +
+                            '<div class="product-card__two-image">' +
+                            ' <span class="product-card__two-sale">sale</span>' +
+                            '<input id="myuserID" type="hidden" value="' + mydata[i].soilID + '" />' +
+                            '<img src="http://localhost:8088/UniverseFarmBack/static/picture/goods/' + mydata[i].soilPhoto + '" alt="">' +
+                            '<div class="product-card__two-image-content">' +
+                            '<a href="#" onclick="seeGoodDetail(' + mydata[i].soilId + ')"><i class="organik-icon-visibility"></i></a>' +
+                            // '<a href="#"><i class="organik-icon-heart"></i></a>' +
+                            '<a href="withdraw.html" onclick="mysend('+mydata[i].soilId+')"><i class="organik-icon-shopping-cart"></i></a>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="product-card__two-content">' +
+                            '<h3><a href="product-details.html">' + mydata[i].soilName +  '</a></h3>' +
+                            '<div class="product-card__two-stars">' +
+                            '<i class="fa fa-star"></i>' +
+                            '<i class="fa fa-star"></i>' +
+                            '<i class="fa fa-star"></i>' +
+                            '<i class="fa fa-star"></i>' +
+                            '<i class="fa fa-star"></i>' +
+                            '</div>' +
+                            '<p>￥' + mydata[i].soilPrice + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                        $("#soillist").append(str);
+                    }
+                }
+            }
+        });
+    });
+
+
+</script>
+<script>
+    //此处也可以用.do传后端再跑去新界面，但是为了尝试新方法~
+    //设置cookie传递id去产品详情界面
+    /*var setCookie = function (name, value, day) {
+        //当设置的时间等于0时，不设置expires属性，cookie在浏览器关闭后删除
+        //var expires = day * 24 * 60 * 60 * 1000;
+        var expires = 0;
+        var exp = new Date();
+        exp.setTime(exp.getTime() + expires);
+        document.cookie = name + "=" + value + ";expires=" + exp.toUTCString();
+    };*/
+    //传递cookie
+    function seeGoodDetail(goodId){
+        /*var name = document.getElementById("userName");
+        var pass = document.getElementById("passwords");*/
+        /*setCookie('userName',name.value,7)*/
+        //setCookie('goodId',goodId.value,0);
+        location.href = 'product-details.html';
+        //设置localStorage，只能同域名同端口传值
+        window.localStorage.setItem('goodId',goodId);
+
+    }
+    //删除cookie
+    var delCookie = function (name) {
+        setCookie(name, ' ', -1);
+    };
+    function deletecookie() {
+        delCookie('userName',' ',-1)
+    }
+    function mysend(soilId)
+    {
+        location.href='withdraw.html';
+        window.localStorageName.setItem(soilId);
+    }
+</script>
+<!-- 把东西寄给自己-->
+<script>
+    function sendToMe(goodId) {
+        $.ajax({
+            url: "http://localhost:8088/UniverseFarmBack/sendToMe",
+            dataType: "json",
+            data: {soilinfoid: goodId},
+            type: "get",
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (result) {
+                alert(result.msg);
+                //跳转到登录页面？刷新页面
+                // location.reload();
+            }
+        });
+
+
+    }
+</script>
+<script>
+    function updateuserinfo() {
+        //  角色不用修改，登录名不用修改，积分不用修改
+        //获取要修改数据
+
+        var updateUserRname = $("#updateuserrname").val();
+        var updateUserPhone = $("#updateuserphone").val();
+        var updateUserAddress = $("#updateuseraddress").val();
+        console.log(updateUserRname);
+        console.log(updateUserPhone);
+        console.log(updateUserAddress);
+        /*性别*/
+        /*var i = 0;
+        for (i; i < list.length; i++) {
+            if (list[i].checked) {
+                sex = list[i].value;
+            }
+        }*/
+        //调用ajax  将要修改的用户信息传入后端控制器
+        $.ajax({
+            url: "http://localhost:8088/UniverseFarmBack/updateUserInfo.do",
+            dataType: "json",
+            type: "get",
+            data: {
+                userRname: updateUserRname,
+                phone: updateUserPhone,
+                address: updateUserAddress
+            },
+            xhrFields: {                               //保存session在跨域访问中不会丢失！！！
+                withCredentials: true
+            },
+            async: true,
+            crossDomain: true,
+            success: function (result) {
+                if (result.flag == 0) {
+                    //修改失败
+                    alert(result.msg);
+                } else {
+                    //修改成功
+                    alert(result.msg);
+                }
+            }
+
+        });
+    }
+
+    //更新头像
+    function updateavatar() {
+        var avatarImg = $("#imgg").attr("src");
+        /*var blob = dataURItoBlob(avatarImg); // 上一步中的函数
+        //借助html5的canvas
+        var canvas = document.createElement('canvas');
+        var dataURL = canvas.toDataURL('image/jpeg', 0.5);
+        var fd = new FormData(document.forms[0]);
+        fd.append("file", blob, 'avatarImg.png');*/
+
+
+//这里对base64串进行操作，去掉url头，并转换为byte
+        var bytes = window.atob(avatarImg.split(',')[1]);
+
+//处理异常，将ASCII码小于0的转换为大于0
+        var array = [];
+        for (var i = 0; i < bytes.length; i++) {
+            array.push(bytes.charCodeAt(i));
+        }
+        var blob = new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
+        var fd = new FormData();
+        fd.append('file', blob, Date.now() + '.jpg');
+
+
+        //上面的the_file为这个文件的key，等效于input中的name
+        // image.png则是文件名，由于base64的图片信息是不带文件名的，所以可以手动指定一个，这个参数是可选的
+
+        /*var formData = new FormData();
+        console.log(formData);
+        formData.append("file",$("#prev")[0].files[0]);*/
+        //获取上传的头像
+
+        //console.log(avatarImg);
+        $.ajax({
+            // url: "http://localhost:8088/UniverseFarmBack/uploadUserAvatar.do",
+            url: "http://localhost:8081/tpm/user/uploadUserAvatarToQiNiu/-253960191",
+            type: 'POST',
+            // 告诉jQuery不要去处理发送的数据
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            /*dataType: 'json',*/
+            headers:{
+                token:"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1NTkwMDgwOSwidXNlcm5hbWUiOiJ6aGFuZ3NhbjMifQ.qp-DQXMrWCtTvI8_cdAUif9GS9E48HIR8QX9swrjJs4"
+            },
+            data: fd,
+
+            xhrFields: {                               //保存session在跨域访问中不会丢失！！！
+                withCredentials: true
+            },
+            crossDomain: true,
+            beforeSend: function () {
+                console.log("正在进行，请稍候");
+            },
+            success: function (result) {
+                if (result.flag == 0) {
+                    alert("头像上传异常，请稍后再试");
+                } else {
+                    alert("头像上传成功！");
+                    //设置头像
+                    $("#userphoto").html("<img src='http://localhost:8088/UniverseFarmBack/static/picture/avatar/" + result.data.userPhoto + "' alt=''/>");
+                    //http://localhost:8088/UniverseFarmBack/static/picture/avatar/1640652355689_1640652355651.jpg
+                    $("#updateuserphoto").html("<img src='http://localhost:8088/UniverseFarmBack/static/picture/avatar/" + result.data.userPhoto + "' alt=''/>");
+
+                    location.reload();
+                }
+            },
+            error: function (result) {
+                console.log("error");
+                location.reload();
+            }
+        });
+    }
+
+    /*//整理一下base64的前面几个字符，预处理以后转换成Blob对象，这个之后稍作处理可以放在formData中
+    function dataURItoBlob(base64Data) {
+        var byteString;
+        if (base64Data.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(base64Data.split(',')[1]);
+        else
+            byteString = unescape(base64Data.split(',')[1]);
+        var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ia], {type:mimeString});
+    }*/
+</script>
+<script>
+    //当文档加载完毕时触发
+    $(document).ready(function () {
+        //加载当前的登录用户
+        $.ajax({
+            url: "http://localhost:8088/UniverseFarmBack/getLoginUser.do",
+            dataType: "json",
+            type: "get",
+            xhrFields: {                               //保存session在跨域访问中不会丢失！！！
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (result) {
+                if (result.flag == 0) {
+                    alert(result.msg);
+                    location.href = "login.html";
+                } else {
+
+                    //将用户信息填充到页面上
+                    $("#userlname").html(result.data.userAccount);
+                    var input = document.getElementById("userlname");  //获取input对象
+                    /*input.setAttribute("value", result.data.userAccount);  //为input对象设置value属性和值*/
+                    $("#userrname").html(result.data.userName);
+                    input = document.getElementById("updateuserrname");
+                    input.setAttribute("value", result.data.userName);
+                    $("#useraddress").html(result.data.userAddressed);
+                    input = document.getElementById("updateuseraddress");
+                    input.setAttribute("value", result.data.userAddressed);
+                    $("#userphone").html(result.data.userPhone);
+                    input = document.getElementById("updateuserphone");
+                    input.setAttribute("value", result.data.userPhone);
+                    $("#userintegral").html("虚拟货币：" + result.data.userIntegral);
+                    /*console.log("user.user_photo照片对象："+user.user_photo);
+                    console.log("result.data.userPhoto照片对象："+result.data.userPhoto);*/
+                    if (result.data.userPhoto == null) {
+                        $("#userphoto").html("<img src='static/picture/avatar/testi-1-1.png' alt=''/>");
+                        $("#updateuserphoto").html("<img src='static/picture/avatar/testi-1-1.png' alt=''/>");
+                    } else {
+                        $("#userphoto").html("<img src='http://localhost:8088/UniverseFarmBack/static/picture/avatar/" + result.data.userPhoto + "' alt=''/>");
+                        //D:\Program\IdeaProjects\UniverseFarmBack\out\artifacts\UniverseFarmBack_Web_exploded\static\picture\avatar
+                        //1640649492830_1640649492797.jpg
+                        //对照组，看看user.user_photo跟result.data.userPhoto能不能用，结论是：user.user_photo不能用，是用来获取更新后信息的
+                        $("#updateuserphoto").html("<img src='http://localhost:8088/UniverseFarmBack/static/picture/avatar/" + result.data.userPhoto + "' alt=''/>");
+                    }
+                }
+            }
+        });
+    });
+
+
+</script>
+</head>
+<body>
+<div class="preloader">
+    <img class="preloader__image" width="55" src="static/picture/loader.png" alt=""/>
+</div>
+
+<div class="page-wrapper">
+    <header class="main-header">
+        <div class="topbar">
+            <div class="container">
+                <div id="logininfo"></div>
+                <div class="main-logo">
+                    <a href="index.html" class="logo">
+                        <img src="static/picture/universe.PNG" width="300" alt="">
+                    </a>
+                    <div class="mobile-nav__buttons">
+                        <a href="#" class="search-toggler"><i class="organik-icon-magnifying-glass"></i></a>
+                        <a href="#" class="mini-cart__toggler"><i class="organik-icon-shopping-cart"></i></a>
+                    </div>
+                    <span class="fa fa-bars mobile-nav__toggler"></span>
+                </div>
+                <div class="topbar__left">
+                    <div class="topbar__social">
+                        <a href="#" class="fab fa-twitter"></a>
+                        <a href="#" class="fab fa-facebook-square"></a>
+                        <a href="#" class="fab fa-instagram"></a>
+                    </div>
+                    <div class="topbar__info">
+                        <i class="organik-icon-email"></i>
+                        <p>Email <a href="/cdn-cgi/l/email-protection#8de4e3ebe2cde2ffeaece3e4e6a3eee2e0"><span
+                                class="__cf_email__" data-cfemail="90f9fef6ffd0ffe2f7f1fef9fbbef3fffd">[email&#160;protected]</span></a>
+                        </p>
+                    </div>
+                </div>
+                <div class="topbar__right">
+                    <div class="topbar__info">
+                        <i class="organik-icon-calling"></i>
+                        <p>Phone <a href="tel:+92-666-888-0000">92 666 888 0000</a></p>
+                    </div>
+                    <div class="topbar__buttons">
+                        <a href="#" class="search-toggler"><i class="organik-icon-magnifying-glass"></i></a>
+                        <a href="#" class="mini-cart__toggler"><i class="organik-icon-shopping-cart"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="main-menu">
+            <div class="container">
+                <!--个人信息页面-->
+                <div class="main-menu__login" id="userinfo">
+                </div>
+                <ul class="main-menu__list">
+                    <li class="dropdown">
+                        <a href="index.html">主页</a>
+                        <ul>
+                            <li><a href="index.html">主界页</a></li>
+                            <li><a href="#shangpin">商品</a></li>
+                            <li><a href="#jianjie">简介</a></li>
+                            <li><a href="#gonglue">攻略</a></li>
+                            <!--<li class="dropdown">
+                                <a href="#">Header Styles</a>
+                                <ul>
+                                    <li><a href="index.html">Header One</a></li>
+                                    <li><a href="index-2.html">Header Two</a></li>
+                                </ul>
+                            </li>-->
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="products.html">交易市场</a>
+                        <!--<ul>
+                            <li><a href="products.html">Shop</a></li>
+                            <li><a href="product-details.html">Product Details</a></li>
+                            <li><a href="cart.html">Cart Page</a></li>
+                            <li><a href="checkout.html">Checkout</a></li>
+                        </ul>-->
+                    </li>
+                    <li class="dropdown"><a href="cart.html">购物车</a>
+                        <!--<ul>
+                            <li><a href="news.html">购物车</a></li>
+                            <li><a href="news-details.html">News Details</a></li>
+                        </ul>-->
+                    </li>
+                    <li><a href="mysoils.html">个人农场</a></li>
+                    <li><a href="soils.html">农场社区</a></li>
+                </ul>
+                <!--<li>
+                <a href="about.html">About</a>
+                </li>-->
+                <!--<li class="dropdown">
+                    <a href="products.html">Shop</a>
+                    <ul>
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="product-details.html">Product Details</a></li>
+                        <li><a href="cart.html">Cart Page</a></li>
+                        <li><a href="checkout.html">Checkout</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="news.html">News</a>
+                    <ul>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="news-details.html">News Details</a></li>
+                    </ul>
+                </li>
+                <li><a href="soils.html">Contact</a></li>
+            </ul>-->
+                <div class="main-menu__language">
+                    <img src="static/picture/flag-1-0.jpg" alt="">
+                    <label class="sr-only" for="language-select">选择语言</label>
+
+                    <select class="selectpicker" id="language-select-header">
+                        <option value="english">中文</option>
+                        <option value="arabic">英语</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="stricky-header stricked-menu main-menu">
+        <div class="sticky-header__content"></div>
+    </div>
+    <section class="page-header">
+        <div class="page-header__bg" style="background-image: url(static/images/page-header-bg-1-1.jpg);"></div>
+
+        <div class="container">
+            <h2>我的信息</h2>
+            <ul class="thm-breadcrumb list-unstyled">
+                <li><a href="index.html">个人中心</a></li>
+                <li>/</li>
+                <li><span>个人信息</span></li>
+            </ul>
+        </div>
+    </section>
+    <section class="testimonials-one">
+        <div class="testimonials-one__head">
+            <div class="container">
+                <div class="block-title text-center">
+                    <div class="block-title__decor" id="change"></div>
+                    <p>Your Information</p>
+                    <h3>You Are Our Best Wealth</h3>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <!--            "container": "#testimonials-one-box",--><!--启用此物会造成多个clone信息表导致无法正常更新用户信息！-->
+            <div class="thm-tiny__slider" id="testimonials-one-box" data-tiny-options='{
+
+            "items": 1,
+            "slideBy": "page",
+            "gutter": 0,
+            "mouseDrag": true,
+            "autoplay": true,
+            "nav": false,
+            "controlsPosition": "bottom",
+            "controlsText": ["<i class=\"fa fa-angle-left\"></i>", "<i class=\"fa fa-angle-right\"></i>"],
+            "autoplayButtonOutput": false,
+            "responsive": {
+                "640": {
+                  "items": 2,
+                  "gutter": 30
+                },
+                "992": {
+                  "gutter": 30,
+                  "items": 3
+                },
+                "1200": {
+                  "disable": true
+                }
+              }
+        }'>
+                <div>
+                    <div class="testimonials-one__single">
+                        <div class="testimonials-one__image" id="userphoto">
+                            <!--用户头像-->
+                        </div>
+                        <div class="testimonials-one__content">
+                            <p id="userrname"></p>
+                            <p id="userphone"></p>
+                            <p id="useraddress"></p>
+                            <p id="userintegral"></p>
+                            <h3 id="userlname"></h3>
+                            <span>Infomation</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="testimonials-one__single">
+                        <div class="testimonials-one__image">
+                            <img src="static/picture/avatar/sfcar.png" alt="">
+                        </div>
+                        <form action="#" class="mc-form" id="money" style="width: 400px">
+                            <div class="testimonials-one__content" style="width: 400px">
+
+                                <p>收件人：<input type="email" name="EMAIL" id="updateuserrname" value=""
+                                              placeholder="userNAME"></p>
+                                <p>联系电话：<input type="email" name="EMAIL" id="updateuserphone" value=""
+                                               placeholder="userPHONE"></p>
+                                <p>收货地址：<input type="email" name="EMAIL" id="updateuseraddress" value=""
+                                               placeholder="userADDRESS"></p>
+                                <p></p>
+                                <span>Update Infomation</span>
+                            </div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="userinfo.html">
+                                <button style="text-align: center" type="submit" class="thm-btn"
+                                        onclick="updateuserinfo()">Update
+                                </button>
+                            </a>
+                            <a href="recharge.html" >
+                                <button href="recharge.html" onclick="window.open('recharge.html')" style="text-align: center" type="submit" class="thm-btn" >
+                                    充值
+                                </button>
+                            </a>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <div class="testimonials-one__single">
+                        <div class="testimonials-one__image" id="updateuserphoto">
+                            <!--用户头像-->
+
+                        </div>
+                        <form action="#" class="mc-form">
+                            <div class="testimonials-one__content">
+                                <p></p>
+
+                                <p></p>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span>Update Avatar</span>
+                            </div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="submit" class="thm-btn" href="#mymodal" data-toggle='modal'>Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="mymodal" class="modal fade">
+        <!--相对定位，自适应宽高-->
+        <!--当分辨率大于768px时，宽度为600px-->
+
+        <div class="modal-dialog" style="display: inline-block;left: 300px">
+            <div class="modal-content" style="align-content: center;width: 910px">
+                <div id="_modalDialog_body" class="modal-body">
+                    <!--Tz_box start-->
+                    <div id="Tz_box">
+                        <input type="file" id="input" size="10" style="visibility:hidden;">
+                        <canvas id="Tz_wrap"></canvas>
+                        <p class="ptit">请拖拽图片至此区域</p>
+                        <!--btnbox start-->
+                        <div class="btnbox">
+                            <div id="rotateLeftBtn">↶<span>左旋转</span></div>
+                            <div id="rotateRightBtn">↷<span>左旋转</span></div>
+                            <div id="upload">⇧<span>上传图片</span></div>
+                            <div id="send">➥<span>确认发送</span></div>
+                        </div>
+                        <!--btnbox end-->
+                        <!--showbox start-->
+                        <div class="showbox">
+                            <canvas id="preview180" class="preview"></canvas>
+                            <span class="tit">图片预览:158*158</span>
+                            <!--此处会填充src-->
+                            <div class="prev"><img src="" alt="" id="imgg"></div>
+                            <span class="tit">生成图片可右键保存到本地</span>
+                        </div>
+                        <!--show box end-->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button class="btn btn-primary" onclick="updateavatar()">提交</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--<section class="funfact-one jarallax" data-jarallax data-speed="0.3" data-imgPosition="50% 50%">
+        <img src="static/picture/funfact-bg-1-1.jpg" class="jarallax-img" alt="">
+        <div class="container">
+            <div class="row no-gutters">
+                <div class="col-md-6 col-lg-3  wow fadeInLeft" data-wow-duration="1500ms" data-wow-delay="0ms">
+                    <div class="funfact-one__single">
+                        <h3 class="odometer" data-count="8080">00</h3>
+                        <p>Send Products</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3  wow fadeInLeft" data-wow-duration="1500ms" data-wow-delay="100ms">
+                    <div class="funfact-one__single">
+                        <h3 class="odometer" data-count="697">00</h3>
+                        <p>Users</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3  wow fadeInLeft" data-wow-duration="1500ms" data-wow-delay="200ms">
+                    <div class="funfact-one__single">
+                        <h3 class="odometer" data-count="440">00</h3>
+                        <p>Profiting</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3  wow fadeInLeft" data-wow-duration="1500ms" data-wow-delay="300ms">
+                    <div class="funfact-one__single">
+                        <h3 class="odometer" data-count="2870">00</h3>
+                        <p>Satisfied Customers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>-->
+
+
+    <section class="new-products">
+        <img src="static/picture/new-product-shape-1.png" alt="" class="new-products__shape-1">
+
+        <div class="container">
+            <div class="new-products__top">
+                <div class="block-title " id="have">
+                    <div class="block-title__decor"></div>
+                    <p>Recently used</p>
+                    <h3>我的拥有</h3>
+                </div>
+                <!--<ul class="post-filter filters list-unstyled">
+                    <li class="active filter" data-filter=".filter-item">全部</li>
+                    <li class="filter" data-filter=".dairy">土地</li>
+                    <li class="filter" data-filter=".pantry">树苗
+                    </li>
+
+                    <li class="filter" data-filter=".fruits">果实
+                    </li>
+                    <li class="filter" data-filter=".veg">工具
+                    </li>
+                </ul>-->
+            </div>
+            <!--此处插入我发布的产品-->
+            <div class="row filter-layout" id="soillist">
+                <!--<div class="col-lg-4 col-md-6 filter-item fruits">
+                    <div class="product-card__two">
+                        <div class="product-card__two-image">
+                            <span class="product-card__two-sale">sale</span>
+                            <img src="static/picture/苹果果.png" alt="">
+                            <div class="product-card__two-image-content">
+                                <a href="#"><i class="organik-icon-visibility"></i></a>
+                                <a href="#"><i class="organik-icon-heart"></i></a>
+                                <a href="cart.html"><i class="organik-icon-shopping-cart"></i></a>
+                            </div>
+                        </div>
+                        <div class="product-card__two-content">
+                            <h3><a href="product-details.html">苹果</a></h3>
+                            <div class="product-card__two-stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <p>￥1.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 filter-item fruits">
+                    <div class="product-card__two">
+                        <div class="product-card__two-image">
+                            <img src="static/picture/柚子果.png" alt="" height="236">
+                            <div class="product-card__two-image-content">
+                                <a href="#"><i class="organik-icon-visibility"></i></a>
+                                <a href="#"><i class="organik-icon-heart"></i></a>
+                                <a href="cart.html"><i class="organik-icon-shopping-cart"></i></a>
+                            </div>
+                        </div>
+                        <div class="product-card__two-content">
+                            <h3><a href="product-details.html">橙子</a></h3>
+                            <div class="product-card__two-stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <p>￥3.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 filter-item pantry">
+                    <div class="product-card__two">
+                        <div class="product-card__two-image">
+                            <img src="static/picture/苹果苗.png" alt="" height="236">
+                            <div class="product-card__two-image-content">
+                                <a href="#"><i class="organik-icon-visibility"></i></a>
+                                <a href="#"><i class="organik-icon-heart"></i></a>
+                                <a href="cart.html"><i class="organik-icon-shopping-cart"></i></a>
+                            </div>
+                        </div>
+                        <div class="product-card__two-content">
+                            <h3><a href="product-details.html">苹果树苗</a></h3>
+                            <div class="product-card__two-stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <p>￥1.00</p>
+                        </div>
+                    </div>
+                </div></br>-->
+
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+</div>
+
+<footer class="site-footer background-black-2">
+    <img src="static/picture/footer-bg-1-1.png" alt="" class="site-footer__shape-1">
+    <img src="static/picture/footer-bg-1-2.png" alt="" class="site-footer__shape-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                <div class="footer-widget footer-widget__about-widget">
+                    <a href="index.html" class="footer-widget__logo">
+                        <img src="static/picture/universe.PNG" alt="" width="250" height="80">
+                    </a>
+                    <p class="thm-text-dark">
+                        请相信快乐的想法，从没有离开过我们的身旁，<br>
+                        就像网络上虚拟的农场，终会成为现实的天堂。
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                <div class="footer-widget footer-widget__contact-widget">
+                    <h3 class="footer-widget__title">联系我们</h3>
+                    <ul class="list-unstyled footer-widget__contact">
+                        <li>
+                            <i class="fa fa-phone-square"></i>
+                            <a href="tel:18360495939">18360495939</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope"></i>
+                            <a href="/cdn-cgi/l/email-protection#8be2e5ede4cbe8e4e6fbeae5f2a5e8e4e6"><span
+                                    class="__cf_email__" data-cfemail="620b0c040d22010d0f12030c1b4c010d0f">1776356421@qq.com</span></a>
+                        </li>
+                        <li>
+                            <i class="fa fa-map-marker-alt"></i>
+                            <a href="#">福建省厦门市集美大学诚毅学院
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                <div class="footer-widget footer-widget__links-widget">
+                    <h3 class="footer-widget__title">为你推荐</h3>
+                    <ul class="list-unstyled footer-widget__links">
+                        <li>
+                            <a href="index.html">热卖榜单</a>
+                        </li>
+                        <li>
+                            <a href="products.html">购物</a>
+                        </li>
+                        <li>
+                            <a href="about.html">关于我们</a>
+                        </li>
+                        <li>
+                            <a href="contact.html">反馈</a>
+                        </li>
+                        <li>
+                            <a href="contact.html">客服</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                <div class="footer-widget">
+                    <h3 class="footer-widget__title">配送方式</h3>
+                    <ul class="list-unstyled footer-widget__links">
+                        <li>
+                            <a href="products.html">上门自提</a>
+                        </li>
+                        <li>
+                            <a href="checkout.html">211限时达</a>
+                        </li>
+                        <li>
+                            <a href="contact.html">配送服务查询</a>
+                        </li>
+                        <li>
+                            <a href="contact.html">海外配送</a>
+                        </li>
+                        <li>
+                            <a href="contact.html">配送费收取标准</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                <div class="footer-widget">
+                    <h3 class="footer-widget__title">售后服务</h3>
+                    <form action="#" data-url="YOUR_MAILCHIMP_URL" class="mc-form">
+                        <input type="email" name="EMAIL" id="mc-email" placeholder="退款说明">
+                        <button type="submit">价格保护</button>
+                    </form>
+                    <div class="mc-form__response"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-footer">
+        <div class="container">
+            <hr>
+            <div class="inner-container text-center">
+                <div class="bottom-footer__social">
+                    <a href="#" class="fab fa-twitter"></a>
+                    <a href="#" class="fab fa-facebook-square"></a>
+                    <a href="#" class="fab fa-instagram"></a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="mobile-nav__wrapper">
+    <div class="mobile-nav__overlay mobile-nav__toggler"></div>
+
+    <div class="mobile-nav__content">
+        <span class="mobile-nav__close mobile-nav__toggler"><i class="organik-icon-close"></i></span>
+        <div class="logo-box">
+            <a href="personal.html" aria-label="logo image"><img src="static/picture/logo-light.png" width="155"
+                                                                 alt=""/></a>
+        </div>
+
+        <div class="mobile-nav__container"></div>
+
+        <ul class="mobile-nav__contact list-unstyled">
+            <li>
+                <i class="organik-icon-email"></i>
+                <a href="/cdn-cgi/l/email-protection#8fe1eaeaebe7eae3ffcfe0fde8eee1e6e4a1ece0e2"><span
+                        class="__cf_email__" data-cfemail="1d737878797578716d5d726f7a7c737476337e7270">[email&#160;protected]</span></a>
+            </li>
+            <li>
+                <i class="organik-icon-calling"></i>
+                <a href="tel:666-888-0000">666 888 0000</a>
+            </li>
+        </ul>
+        <div class="mobile-nav__top">
+            <div class="mobile-nav__language">
+                <img src="static/picture/flag-1-1.jpg" alt="">
+                <label class="sr-only" for="language-select">select language</label>
+
+                <select class="selectpicker" id="language-select">
+                    <option value="english">English</option>
+                    <option value="arabic">Arabic</option>
+                </select>
+            </div>
+            <div class="main-menu__login">
+                <a href="#"><i class="organik-icon-user"></i>Login / Register</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="mini-cart">
+    <div class="mini-cart__overlay mini-cart__toggler"></div>
+    <div class="mini-cart__content">
+        <div class="mini-cart__top">
+            <h3 class="mini-cart__title">Shopping Cart</h3>
+            <span class="mini-cart__close mini-cart__toggler"><i class="organik-icon-close"></i></span>
+        </div>
+        <div class="mini-cart__item">
+            <img src="static/picture/cart-1-1.jpg" alt="">
+            <div class="mini-cart__item-content">
+                <div class="mini-cart__item-top">
+                    <h3><a href="product-details.html">Banana</a></h3>
+                    <p>$9.99</p>
+                </div>
+                <div class="quantity-box">
+                    <button type="button" class="sub">-</button>
+                    <input type="number" id="2" value="1"/>
+                    <button type="button" class="add">+</button>
+                </div>
+            </div>
+        </div>
+        <div class="mini-cart__item">
+            <img src="static/picture/cart-1-2.jpg" alt="">
+            <div class="mini-cart__item-content">
+                <div class="mini-cart__item-top">
+                    <h3><a href="product-details.html">Tomato</a></h3>
+                    <p>$9.99</p>
+                </div>
+                <div class="quantity-box">
+                    <button type="button" class="sub">-</button>
+                    <input type="number" id="2" value="1"/>
+                    <button type="button" class="add">+</button>
+                </div>
+            </div>
+        </div>
+        <div class="mini-cart__item">
+            <img src="static/picture/cart-1-3.jpg" alt="">
+            <div class="mini-cart__item-content">
+                <div class="mini-cart__item-top">
+                    <h3><a href="product-details.html">Bread</a></h3>
+                    <p>$9.99</p>
+                </div>
+                <div class="quantity-box">
+                    <button type="button" class="sub">-</button>
+                    <input type="number" id="2" value="1"/>
+                    <button type="button" class="add">+</button>
+                </div>
+            </div>
+        </div>
+        <a href="checkout.html" class="thm-btn mini-cart__checkout">Proceed To Checkout</a>
+    </div>
+</div>
+<div class="search-popup">
+    <div class="search-popup__overlay search-toggler"></div>
+
+    <div class="search-popup__content">
+        <form action="#">
+            <label for="search" class="sr-only">search here</label>
+            <input type="text" id="search" placeholder="Search Here..."/>
+            <button type="submit" aria-label="search submit" class="thm-btn">
+                <i class="organik-icon-magnifying-glass"></i>
+            </button>
+        </form>
+    </div>
+
+</div>
+</div>
+<a href="#" data-target="html" class="scroll-to-target scroll-to-top"><i class="fa fa-angle-up"></i></a>
+<script src="static/js/jquery-3.5.1.min.js"></script>
+<script src="static/js/bootstrap.bundle.min.js"></script>
+<script src="static/js/bootstrap-select.min.js"></script>
+<script src="static/js/jarallax.min.js"></script>
+<script src="static/js/jquery.ajaxchimp.min.js"></script>
+<script src="static/js/jquery.appear.min.js"></script>
+<script src="static/js/jquery.circle-progress.min.js"></script>
+<script src="static/js/jquery.magnific-popup.min.js"></script>
+<script src="static/js/jquery.validate.min.js"></script>
+<script src="static/js/nouislider.min.js"></script>
+<script src="static/js/odometer.min.js"></script>
+<script src="static/js/swiper.min.js"></script>
+<script src="static/js/tiny-slider.min.js"></script>
+<script src="static/js/wnumb.min.js"></script>
+<script src="static/js/wow.js"></script>
+<script src="static/js/isotope.js"></script>
+<script src="static/js/countdown.min.js"></script>
+
+<script src="static/js/organik.js"></script>
+<!--Tz_box end-->
+<script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="static/js/imagecropper.js"></script>
+<script type="text/javascript" src="static/js/imgupload.js"></script>
+
+</body>
+</html>

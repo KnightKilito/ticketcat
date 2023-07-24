@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body>
+<div style="width: 200px;margin: 50px auto">
+    <div id="qrcode"></div>
+</div>
+
+<script type='text/javascript' src='http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js'></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+<script>
+    $(function () {
+        //获取二维码参数
+        $.get('http://www.zhelovechun.top:8081/tpm/wxUser/getQrCode', function (res) {
+            //生成二维码
+            $('#qrcode').qrcode(res.url);
+
+            //轮训获取用户扫码登录状态
+            var task = setInterval(function () {
+                $.post('http://www.zhelovechun.top:8081/tpm/wxUser/checkLogin', {ticket: res.ticket}, function (ok) {
+                    //扫码成功登录成功
+                    if (ok) {
+                        clearInterval(task)
+                        location.href = 'http://www.zhelovechun.top:8081/tpm/wxUser/success'
+                    }
+                })
+            }, 5000)
+        })
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.suoluomei.com/common/js/jquery-2.1.4.min.js"></script>
+    <script>
+        function jump(){
+
+            let tickets = [
+                {
+                    sessionseatid: 308,
+                    sid: 1916866577,
+                    hid: 1,
+                    columnname: 1,
+                    rowname: 1
+                }
+            ];
+            $.ajax({
+                url: "http://www.zhelovechun.top:8081/tpm/ticket/addTicketButNoMoney/-253960191",
+                type: 'POST',
+                // // 告诉jQuery不要去处理发送的数据
+                // processData: false,
+                // // 告诉jQuery不要去设置Content-Type请求头
+                contentType: 'application/json',
+                // dataType: 'json',
+                // headers:{
+                //     token:""
+                // },
+                data: JSON.stringify(tickets),
+
+                xhrFields: {                               //保存session在跨域访问中不会丢失！！！
+                    withCredentials: true
+                },
+                crossDomain: true,
+                beforeSend: function () {
+                    console.log("正在进行，请稍候");
+                },
+                success: function (result) {
+                    console.log("success");
+                    console.log(result);
+                    let ticketInfo = result.data;
+                    console.log(ticketInfo)
+                    alipay(ticketInfo);
+                },
+                error: function (result) {
+                    console.log("error");
+                    location.reload();
+                }
+            });
+        }
+        function alipay(ticketInfo){
+            console.log("alipay():");
+            console.log(ticketInfo);
+            let ticket = {
+                tid: ticketInfo.tid,
+                sid: ticketInfo.sid,
+                mid: ticketInfo.mid,
+                uid: ticketInfo.uid,
+                tmoney: ticketInfo.tmoney,
+                tcontext: ticketInfo.tcontext
+            }
+            $.ajax({
+                url: "http://www.zhelovechun.top:8081/tpm/alipay/pay",
+                type: 'POST',
+                // // 告诉jQuery不要去处理发送的数据
+                // processData: false,
+                // // 告诉jQuery不要去设置Content-Type请求头
+                // contentType: 'application/json',
+                // dataType: 'json',
+                // headers:{
+                //     token:""
+                // },
+                // data: JSON.stringify(ticket),
+                data: ticket,
+                xhrFields: {                               //保存session在跨域访问中不会丢失！！！
+                    withCredentials: true
+                },
+                crossDomain: true,
+                beforeSend: function () {
+                    console.log("正在进行，请稍候");
+                },
+                success: function (result) {
+                    console.log("success");
+                    console.log(result);
+                    $("#paycheckbox").html( "<a>支付了吗？</a>"+
+                        "<button type=\"submit\" onclick=\"checkIfPay()\">已支付</button>"+
+                        "<button type=\"submit\" onclick=\"jump()\">未支付</button>");
+
+                    $("#paybox").html(result.message)
+
+
+                    // checkIfPay();
+                    //轮训获取用户支付状态
+                    // var task = setInterval(function () {
+                    //     checkIfPay();
+                    // }, 5000)
+                },
+                error: function (result) {
+                    console.log("error");
+                    location.reload();
+                }
+            });
+        }
+        function checkIfPay(){
+            $.ajax({
+                url: "http://www.zhelovechun.top:8081/tpm/ticket/checkPay",
+                type: 'GET',
+                success: function (checkPayRes) {//当判断支付成功——即ticket状态变成已支付后返回true
+                    console.log(checkPayRes);
+                    if(checkPayRes){
+                        clearInterval(task);
+                        location.href = 'success';//去支付成功后的页面
+                    }else{
+                        //未支付
+                    }
+                }
+
+            })
+        }
+    </script>
+</head>
+<body>
+    <div>
+            <button type="submit" onclick="jump()">提交订单</button>
+
+    </div>
+    <div id="paybox"></div>
+    <div id="paycheckbox"></div>
+</body>
+</html>
