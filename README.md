@@ -1,21 +1,23 @@
-
+# 淘票猫影城购票系统-Spring Boot版
 
 # 一、引言
 项目地址：
 |项目名|项目内容|项目地址|开发人员|
 |--|--|--|--|
-|ticketcat|SpringBoot后台服务|[戳我](https://github.com/KnightKilito/ticketcat)|[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://github.com/hankhorse/hankhorse)|
+|ticketcat|Spring Boot后台服务|[戳我](https://github.com/KnightKilito/ticketcat)|[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://github.com/hankhorse/hankhorse)|
 |ticketcat-web-user|Web前端服务-用户端|[戳我](https://github.com/KnightKilito/ticketcat-web-user)|[@东东](https://github.com/zxd16)<br/>[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://github.com/hankhorse/hankhorse)|
 |ticketcat-web-manager|Web前端服务-管理员端|[戳我](https://github.com/KnightKilito/ticketcat-web-manager)|[@东东](https://github.com/zxd16)<br/>[@闪光桐人](https://github.com/KnightKilito)<br/>[@汉克](https://github.com/hankhorse/hankhorse)|
-|ticketcat-wechat-miniprogram|微信小程序前端服务（记得安装vant for wx）|[戳我](https://github.com/KnightKilito/ticketcat-wechat-miniprogram)|[@东东](https://github.com/zxd16)|
+|ticketcat-wechat-miniprogram|微信小程序前端服务|[戳我](https://github.com/KnightKilito/ticketcat-wechat-miniprogram)|[@东东](https://github.com/zxd16)|
 
-**前端的项目请求地址记得改哦**，**前端的项目请求地址记得改哦**，**前端的项目请求地址记得改哦**，当初做项目的时候负责web端的同学偷懒没搞页面路由，而且用的还是传统三剑客，辛苦各位逐一修改了
-
-涉及到AppID、AppSecret等配置项的还得辛苦诸位自己配置一下哈，例如支付宝支付或者微信小程序的一些东西
+## TIPS
+- **前端的项目请求地址记得改哦**，**前端的项目请求地址记得改哦**，**前端的项目请求地址记得改哦**，当初做项目的时候负责web端的同学偷懒没搞页面路由，而且用的还是传统三剑客，辛苦各位逐一修改了
+- 微信小程序前端服务记得安装**vant weapp**哦
+- 涉及到AppID、AppSecret等配置项的还得辛苦诸位自己配置一下哈，例如支付宝支付或者微信小程序微信一键登录的AppID、AppSecret，在项目里都有中文提示
 
 如果因为网络原因无法进入GitHub，可以去我的Gitee主页找同名项目，内容一致。
-https://gitee.com/KnightKilito
-[点击前往](https://gitee.com/KnightKilito)
+
+[https://gitee.com/KnightKilito](https://gitee.com/KnightKilito)
+[https://github.com/KnightKilito](https://github.com/KnightKilito)
 **喜欢的话别忘了star哦 (๑•̀ㅂ•́)و✧**
 
 # 二、项目介绍
